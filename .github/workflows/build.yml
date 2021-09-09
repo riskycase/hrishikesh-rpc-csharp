@@ -18,3 +18,7 @@ jobs:
         dotnet-version: 5.0.x
     - name: Build
       run: dotnet build
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Hrishikesh's RPC - CI
+        path: bin/Debug/Hrishikesh's RPC.exe
