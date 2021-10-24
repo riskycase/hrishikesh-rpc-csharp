@@ -1780,10 +1780,13 @@ namespace Discord
             callback(result);
         }
 
+        // This line ensures that UpdateActivityCallbackImpl is not collected by GC
+        static FFIMethods.UpdateActivityCallback staticCallback = UpdateActivityCallbackImpl;
+
         public void UpdateActivity(Activity activity, UpdateActivityHandler callback)
         {
             GCHandle wrapped = GCHandle.Alloc(callback);
-            Methods.UpdateActivity(MethodsPtr, ref activity, GCHandle.ToIntPtr(wrapped), UpdateActivityCallbackImpl);
+            Methods.UpdateActivity(MethodsPtr, ref activity, GCHandle.ToIntPtr(wrapped), staticCallback);
         }
 
         [MonoPInvokeCallback]
