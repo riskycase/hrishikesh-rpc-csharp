@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
 
 namespace Hrishikesh_s_RPC
@@ -7,6 +8,7 @@ namespace Hrishikesh_s_RPC
     {
         static void Main(string[] args)
         {
+            Config config = Newtonsoft.Json.JsonConvert.DeserializeObject<Config>(File.ReadAllText(@"config.json"));
             Discord.ActivityManager.UpdateActivityHandler updateActivityHandler = (result) =>
             {
                 if (result == Discord.Result.Ok)
@@ -20,18 +22,18 @@ namespace Hrishikesh_s_RPC
             };
             bool unlocked = false;
             var start = DateTime.Now;
-            var discord = new Discord.Discord(874718200997232710, (UInt64)Discord.CreateFlags.Default);
+            var discord = new Discord.Discord(config.ClientId, (UInt64)Discord.CreateFlags.Default);
             var discordActivityManager = discord.GetActivityManager();
             var activity = new Discord.Activity {
-                Details = "Idling",
+                Details = config.LockedDetails,
                 Timestamps =
                 {
                     Start = ((DateTimeOffset)start).ToUnixTimeMilliseconds(),
                 },
                 Assets =
                 {
-                    LargeImage = "rog",
-                    LargeText = "test",
+                    LargeImage = config.DefaultImageKey,
+                    LargeText = config.DefaultImageText,
                 },
                 Instance = false
             };
@@ -45,7 +47,7 @@ namespace Hrishikesh_s_RPC
                         start = DateTime.Now;
                         unlocked = true;
                         activity.Timestamps.Start = ((DateTimeOffset)start).ToUnixTimeMilliseconds();
-                        activity.Details = "Working";
+                        activity.Details = config.UnlockedDetails;
                         discordActivityManager.UpdateActivity(activity, updateActivityHandler);
                     }
                 }
@@ -56,12 +58,12 @@ namespace Hrishikesh_s_RPC
                         start = DateTime.Now;
                         unlocked = false;
                         activity.Timestamps.Start = ((DateTimeOffset)start).ToUnixTimeMilliseconds();
-                        activity.Details = "Idling";
+                        activity.Details = config.LockedDetails;
                         discordActivityManager.UpdateActivity(activity, updateActivityHandler);
                     }
                 }
                 discord.RunCallbacks();
-                Thread.Sleep(250);
+                Thread.Sleep(500);
             }
         }
     }
