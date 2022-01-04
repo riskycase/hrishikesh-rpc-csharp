@@ -4,11 +4,11 @@ namespace Hrishikesh_s_RPC
 {
     internal class Config
     {
-        long clientId;
-        string lockedDetails;
-        string unlockedDetails;
-        string defaultImageKey;
-        string defaultImageText;
+        long clientId = 874718200997232710;
+        string lockedDetails = "AFK";
+        string unlockedDetails = "Working";
+        string defaultImageKey = "rog";
+        string defaultImageText = "ROG";
 
         public long ClientId { get => clientId; set => clientId = value; }
         public string LockedDetails { get => lockedDetails; set => lockedDetails = value; }
